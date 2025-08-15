@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaoConvert Pro - Universal File Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .file-drop-zone {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .file-drop-zone:hover,
+        .file-drop-zone.drag-over {
+            border-color: #667eea;
+            background-color: #f7fafc;
+        }
+        
+        .conversion-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .conversion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        .format-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .file-preview {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 10px 0;
+        }
+        
+        .conversion-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .option-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover,
+        .option-card.selected {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exchange-alt text-2xl feature-icon mr-2"></i>
+                        <span class="font-bold text-xl text-gray-800">FileConvert Pro</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#converter" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Converter</a>
+                    <a href="#features" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                    <a href="#formats" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Formats</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section mt-16">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl font-bold mb-6">Universal File Converter</h1>
+            <p class="text-xl mb-8 opacity-90">Convert PDF to Word, Word to PDF, and 50+ other formats instantly</p>
+            <div class="flex justify-center mb-8">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/28ae2ea0-3a10-49a9-8be7-0a682977c7a0.png" alt="Modern file conversion interface showing various document formats like PDF, Word, Excel, PowerPoint being converted with smooth animations and progress indicators" class="rounded-lg shadow-2xl" />
+            </div>
+            <a href="#converter" class="inline-block bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
+                Start Converting Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Main Converter Section -->
+    <section id="converter" class="py-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="conversion-card p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">File Converter</h2>
+                
+                <!-- File Upload Area -->
+                <div id="dropZone" class="file-drop-zone p-12 text-center mb-6">
+                    <div id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Drop your files here</h3>
+                        <p class="text-gray-500 mb-4">or click to browse from your device</p>
+                        <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.txt,.rtf,.odt">
+                        <button onclick="document.getElementById('fileInput').click()" class="btn-primary text-white px-6 py-3 rounded-full font-semibold">
+                            Choose Files
+                        </button>
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div id="loadingState" class="hidden">
+                        <div class="loading-spinner mx-auto mb-4"></div>
+                        <p class="text-gray-600">Processing your file...</p>
+                    </div>
+                </div>
+
+                <!-- File Preview and Conversion Options -->
+                <div id="filePreview" class="hidden">
+                    <div class="file-preview">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <i id="fileIcon" class="fas fa-file text-2xl text-blue-600 mr-3"></i>
+                                <div>
+                                    <h4 id="fileName" class="font-semibold text-gray-800"></h4>
+                                    <p id="fileSize" class="text-sm text-gray-500"></p>
+                                </div>
+                            </div>
+                            <span id="fileFormat" class="format-badge"></span>
+                        </div>
+                        
+                        <div class="conversion-options">
+                            <h5 class="text-lg font-semibold text-gray-700 mb-4 col-span-full">Convert to:</h5>
+                            
+                            <div class="option-card" data-format="pdf">
+                                <i class="fas fa-file-pdf text-3xl text-red-600 mb-3"></i>
+                                <h6 class="font-semibold">PDF</h6>
+                                <p class="text-sm text-gray-500">Portable Document</p>
+                            </div>
+                            
+                            <div class="option-card" data-format="docx">
+                                <i class="fas fa-file-word text-3xl text-blue-600 mb-3"></i>
+                                <h6 class="font-semibold">Word</h6>
+                                <p class="text-sm text-gray-500">Microsoft Word</p>
+                            </div>
+                            
+                            <div class="option-card" data-format="xlsx">
+                                <i class="fas fa-file-excel text-3xl text-green-600 mb-3"></i>
+                                <h6 class="font-semibold">Excel</h6>
+                                <p class="text-sm text-gray-500">Microsoft Excel</p>
+                            </div>
+                            
+                            <div class="option-card" data-format="pptx">
+                                <i class="fas fa-file-powerpoint text-3xl text-orange-600 mb-3"></i>
+                                <h6 class="font-semibold">PowerPoint</h6>
+                                <p class="text-sm text-gray-500">Microsoft PowerPoint</p>
+                            </div>
+                            
+                            <div class="option-card" data-format="jpg">
+                                <i class="fas fa-file-image text-3xl text-purple-600 mb-3"></i>
+                                <h6 class="font-semibold">JPG</h6>
+                                <p class="text-sm text-gray-500">Image Format</p>
+                            </div>
+                            
+                            <div class="option-card" data-format="txt">
+                                <i class="fas fa-file-alt text-3xl text-gray-600 mb-3"></i>
+                                <h6 class="font-semibold">TXT</h6>
+                                <p class="text-sm text-gray-500">Plain Text</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button id="convertBtn" class="btn-primary text-white px-8 py-3 rounded-full font-semibold disabled:opacity-50" disabled>
+                                Select Format to Convert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversion Progress -->
+                <div id="conversionProgress" class="hidden mt-6">
+                    <div class="bg-gray-200 rounded-full h-4 mb-4">
+                        <div id="progressBar" class="progress-bar h-4 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" class="text-center text-gray-600">Starting conversion...</p>
+                </div>
+
+                <!-- Download Section -->
+                <div id="downloadSection" class="hidden mt-6 text-center">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                        <i class="fas fa-check-circle text-3xl text-green-600 mb-3"></i>
+                        <h4 class="text-lg font-semibold text-green-800 mb-2">Conversion Complete!</h4>
+                        <p class="text-green-600 mb-4">Your file has been successfully converted</p>
+                        <button id="downloadBtn" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition duration-300">
+                            <i class="fas fa-download mr-2"></i>
+                            Download Converted File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Why Choose FileConvert Pro?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <i class="fas fa-bolt text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">Lightning Fast</h3>
+                    <p class="text-gray-600">Convert files in seconds with our optimized processing engine</p>
+                </div>
+                <div class="text-center p-6">
+                    <i class="fas fa-shield-alt text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">100% Secure</h3>
+                    <p class="text-gray-600">Your files are processed securely and deleted after conversion</p>
+                </div>
+                <div class="text-center p-6">
+                    <i class="fas fa-mobile-alt text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">Works Everywhere</h3>
+                    <p class="text-gray-600">Compatible with all devices and operating systems</p>
+                </div>
+                <div class="text-center p-6">
+                    <i class="fas fa-magic text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">High Quality</h3>
+                    <p class="text-gray-600">Maintain original formatting and quality in conversions</p>
+                </div>
+                <div class="text-center p-6">
+                    <i class="fas fa-infinity text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">Unlimited Use</h3>
+                    <p class="text-gray-600">No limits on file size or number of conversions</p>
+                </div>
+                <div class="text-center p-6">
+                    <i class="fas fa-clock text-4xl feature-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-3">24/7 Available</h3>
+                    <p class="text-gray-600">Convert files anytime, anywhere with our online tool</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Formats -->
+    <section id="formats" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Supported File Formats</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <i class="fas fa-file-pdf text-3xl text-red-600 mb-3"></i>
+                    <h4 class="font-semibold">Documents</h4>
+                    <p class="text-sm text-gray-600">PDF, DOC, DOCX, RTF, TXT, ODT</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <i class="fas fa-file-excel text-3xl text-green-600 mb-3"></i>
+                    <h4 class="font-semibold">Spreadsheets</h4>
+                    <p class="text-sm text-gray-600">XLS, XLSX, CSV, ODS</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <i class="fas fa-file-powerpoint text-3xl text-orange-600 mb-3"></i>
+                    <h4 class="font-semibold">Presentations</h4>
+                    <p class="text-sm text-gray-600">PPT, PPTX, ODP</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <i class="fas fa-file-image text-3xl text-purple-600 mb-3"></i>
+                    <h4 class="font-semibold">Images</h4>
+                    <p class="text-sm text-gray-600">JPG, PNG, GIF, BMP, TIFF, SVG</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-exchange-alt text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">FileConvert Pro</span>
+                    </div>
+                    <p class="text-gray-400">The ultimate file conversion tool for all your document needs.</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Popular Conversions</h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">PDF to Word</a></li>
+                        <li><a href="#" class="hover:text-white">Word to PDF</a></li>
+                        <li><a href="#" class="hover:text-white">Excel to PDF</a></li>
+                        <li><a href="#" class="hover:text-white">PPT to PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Support</h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Stay Connected</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2025 AztaoTech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // File handling variables
+        let selectedFile = null;
+        let targetFormat = null;
+
+        // DOM elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const loadingState = document.getElementById('loadingState');
+        const filePreview = document.getElementById('filePreview');
+        const conversionProgress = document.getElementById('conversionProgress');
+        const downloadSection = document.getElementById('downloadSection');
+        const convertBtn = document.getElementById('convertBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // File type icons mapping
+        const fileIcons = {
+            'pdf': 'fas fa-file-pdf text-red-600',
+            'doc': 'fas fa-file-word text-blue-600',
+            'docx': 'fas fa-file-word text-blue-600',
+            'xls': 'fas fa-file-excel text-green-600',
+            'xlsx': 'fas fa-file-excel text-green-600',
+            'ppt': 'fas fa-file-powerpoint text-orange-600',
+            'pptx': 'fas fa-file-powerpoint text-orange-600',
+            'jpg': 'fas fa-file-image text-purple-600',
+            'jpeg': 'fas fa-file-image text-purple-600',
+            'png': 'fas fa-file-image text-purple-600',
+            'gif': 'fas fa-file-image text-purple-600',
+            'txt': 'fas fa-file-alt text-gray-600',
+            'default': 'fas fa-file text-gray-600'
+        };
+
+        // Drag and drop functionality
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelection(files[0]);
+            }
+        });
+
+        // File input change event
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        // Handle file selection
+        function handleFileSelection(file) {
+            selectedFile = file;
+            showLoadingState();
+            
+            // Simulate file processing delay
+            setTimeout(() => {
+                showFilePreview(file);
+            }, 1500);
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            uploadArea.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            filePreview.classList.add('hidden');
+            conversionProgress.classList.add('hidden');
+            downloadSection.classList.add('hidden');
+        }
+
+        // Show file preview
+        function showFilePreview(file) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const fileIcon = fileIcons[fileExtension] || fileIcons['default'];
+            
+            document.getElementById('fileIcon').className = fileIcon;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileFormat').textContent = fileExtension.toUpperCase();
+            
+            loadingState.classList.add('hidden');
+            filePreview.classList.remove('hidden');
+            
+            // Reset conversion options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            convertBtn.disabled = true;
+            convertBtn.textContent = 'Select Format to Convert';
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Handle format selection
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove selection from all cards
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                
+                // Select current card
+                card.classList.add('selected');
+                targetFormat = card.dataset.format;
+                
+                // Enable convert button
+                convertBtn.disabled = false;
+                convertBtn.textContent = `Convert to ${targetFormat.toUpperCase()}`;
+            });
+        });
+
+        // Handle conversion
+        convertBtn.addEventListener('click', () => {
+            if (!selectedFile || !targetFormat) return;
+            
+            startConversion();
+        });
+
+        // Start conversion process
+        function startConversion() {
+            filePreview.classList.add('hidden');
+            conversionProgress.classList.remove('hidden');
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showDownloadSection();
+                    }, 500);
+                }
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 30) {
+                    progressText.textContent = 'Analyzing file structure...';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Converting file format...';
+                } else if (progress < 90) {
+                    progressText.textContent = 'Optimizing output...';
+                } else {
+                    progressText.textContent = 'Finalizing conversion...';
+                }
+            }, 200);
+        }
+
+        // Show download section
+        function showDownloadSection() {
+            conversionProgress.classList.add('hidden');
+            downloadSection.classList.remove('hidden');
+        }
+
+        // Handle download
+        downloadBtn.addEventListener('click', () => {
+            // Create a mock download
+            const fileName = selectedFile.name.split('.')[0] + '.' + targetFormat;
+            const blob = new Blob(['This is a mock converted file'], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Reset the interface
+            setTimeout(() => {
+                resetInterface();
+            }, 1000);
+        });
+
+        // Reset interface
+        function resetInterface() {
+            selectedFile = null;
+            targetFormat = null;
+            
+            uploadArea.classList.remove('hidden');
+            loadingState.classList.add('hidden');
+            filePreview.classList.add('hidden');
+            conversionProgress.classList.add('hidden');
+            downloadSection.classList.add('hidden');
+            
+            fileInput.value = '';
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some animation on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const navbar = document.querySelector('nav');
+            
+            if (scrolled > 100) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>
+
